@@ -34,10 +34,10 @@ const alquilerTypeDefs = gql `
         entregado: Boolean!
     }
 
-    type Query {
+    extend type Query {
         alquilerByUsername(username: String!): [Alquiler]
         alquilerById(alquilerId: String!): Alquiler
-        alquilerList: [AlquilerList!]!
+        alquilerList: [AlquilerList]
     }
 
     extend type Mutation {

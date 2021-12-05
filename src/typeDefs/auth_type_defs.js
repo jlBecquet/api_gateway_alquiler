@@ -43,6 +43,7 @@ const authTypeDefs = gql `
         telefono: Int!
         lic_cond: Int!
         exped_lic: String!
+        is_staff: Boolean!
     }
 
     

@@ -1,7 +1,7 @@
 const usersResolver = {
     Query: {
         userDetailById: (_, { userId }, { dataSources, userIdToken }) => {
-            // console.log(dataSources);
+            console.log(dataSources);
             if (userId == userIdToken)
                 return dataSources.authAPI.getUser(userId)
             else

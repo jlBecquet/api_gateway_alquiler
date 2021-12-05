@@ -15,31 +15,43 @@ const vehiculosResolver = {
     },
 
     Mutation: {
-        nuevoVehiculo: (_, {vehiculo}, {dataSources}) => {
-            return dataSources.vehiculosAPI.createNewVehiculo(vehiculo);
+        nuevoVehiculo: async(_, {vehiculo}, {dataSources, userIdToken}) => {
+            userIsStaff = (await dataSources.authAPI.getUser(userIdToken)).is_staff
+            if (userIsStaff == true)
+                return dataSources.vehiculosAPI.createNewVehiculo(vehiculo);
+            else
+                return null;
+        }, 
+
+        actualizarVehiculo: async(_, {vehiculoId, vehiculoInput}, {dataSources, userIdToken}) => {
+            userIsStaff = (await dataSources.authAPI.getUser(userIdToken)).is_staff
+            if (userIsStaff == true) {
+                const vehiculoActInput = {
+                    id: vehiculoInput.id,
+                    nombre: vehiculoInput.nombre,
+                    placa: vehiculoInput.placa,
+                    marca: vehiculoInput.marca,
+                    modelo: vehiculoInput.modelo,
+                    color: vehiculoInput.color,
+                    cilindraje: vehiculoInput.cilindraje,
+                    fullEquipo: vehiculoInput.fullEquipo,
+                    image_URL: vehiculoInput.image_URL,
+                    transmision: vehiculoInput.transmision,
+                    categoria: vehiculoInput.categoria,
+                    tarifa: vehiculoInput.tarifa,
+                    disponible: vehiculoInput.disponible
+                }
+                return dataSources.vehiculosAPI.updateVehiculo(vehiculoId, vehiculoActInput);
+            } else 
+                return null;
         },
 
-        actualizarVehiculo: (_, {vehiculoId, vehiculoInput}, {dataSources}) => {
-            const vehiculoActInput = {
-                id: vehiculoInput.id,
-                nombre: vehiculoInput.nombre,
-                placa: vehiculoInput.placa,
-                marca: vehiculoInput.marca,
-                modelo: vehiculoInput.modelo,
-                color: vehiculoInput.color,
-                cilindraje: vehiculoInput.cilindraje,
-                fullEquipo: vehiculoInput.fullEquipo,
-                image_URL: vehiculoInput.image_URL,
-                transmision: vehiculoInput.transmision,
-                categoria: vehiculoInput.categoria,
-                tarifa: vehiculoInput.tarifa,
-                disponible: vehiculoInput.disponible
-            }
-            return dataSources.vehiculosAPI.updateVehiculo(vehiculoId, vehiculoActInput);
-        },
-
-        eliminarVehiculo: (_, {vehiculoId}, {dataSources}) => {
-            return dataSources.vehiculosAPI.deleteVehiculo(vehiculoId);
+        eliminarVehiculo: async(_, {vehiculoId}, {dataSources, userIdToken}) => {
+            userIsStaff = (await dataSources.authAPI.getUser(userIdToken)).is_staff
+            if (userIsStaff == true)
+                return dataSources.vehiculosAPI.deleteVehiculo(vehiculoId);
+            else 
+                return null;
         }
     }
 };

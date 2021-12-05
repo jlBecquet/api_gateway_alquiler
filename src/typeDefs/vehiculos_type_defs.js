@@ -36,10 +36,10 @@ const vehiculosTypeDefs = gql `
     type VehiculosList {
         id: String!
         nombre: String!
-        marca: String!
         image_URL: String!
         categoria: String!
         disponible: Boolean!
+        tarifa: Float!
     }
 
     type Query {
